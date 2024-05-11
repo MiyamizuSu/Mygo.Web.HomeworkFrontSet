@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<style> @import "Mygo.studentRegister.css";</style>
+<head>
+    <meta charset="UTF-8">
+    <title>学生注册页面</title>
+</head>
+<body>
+<div class="container" id="app">
+    <form class="studentRegisterForm">
+        <div class="part">
+            <label> 姓名</label>
+            <input v-model="studentMessage.studentName">
+        </div>
+        <div class="part">
+            <label> 学号</label>
+            <input v-model="studentMessage.studentNumber">
+        </div>
+        <div class="part">
+            <label> 班级</label>
+            <input v-model="studentMessage.studentClass">
+        </div>
+        <div class="part" id="formButton">
+            <button @click.prevent="handIn()">注册</button>
+        </div>
+    </form>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            studentMessage:{
+                studentName:'',
+                studentClass:'',
+                studentNumber:'',
+            }
+        },
+        methods:{
+            handIn:function(){
+                //原生的AJAX请求
+                // var xhr = new XMLHttpRequest();
+                // var formData = this.studentMessage
+                // xhr.open("POST", "http://localhost:8080/user/register", true);
+                // xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                // xhr.onreadystatechange = function() {
+                //     if (xhr.readyState === XMLHttpRequest.DONE) {
+                //         if (xhr.status === 200) {
+                //           alert("提交成功"+xhr.responseText);
+                //         }
+                //         else {
+                //             alert('请求失败：'+xhr.status);
+                //         }
+                //     }
+                // };
+                // xhr.send(JSON.stringify(formData));
+                console.log(this.studentMessage)
+                axios.post('http://localhost:8080/user/register',this.studentMessage).then(res=>{
+                    if (res.data.status === 200){
+                        var addDiv=document.getElementById("app")
+                        var newLabel1 = document.createElement("label");
+                        var newLabel2 = document.createElement("label");
+                        var newLabel3 = document.createElement("label");
+                        var newLabel4 = document.createElement("label");
+                        var hang1 = document.createElement("br");
+                        var hang2 = document.createElement("br");
+                        var hang3 = document.createElement("br");
+                        newLabel1.textContent="注册成功"
+                        newLabel2.textContent="姓名为"+res.data.studentName
+                        newLabel3.textContent="班级为"+res.data.studentClass
+                        newLabel4.textContent="学号为"+res.data.studentNumber;
+                        addDiv.appendChild(newLabel1);
+                        addDiv.appendChild(hang1);
+                        addDiv.appendChild(newLabel2);
+                        addDiv.appendChild(hang2);
+                        addDiv.appendChild(newLabel4);
+                        addDiv.appendChild(hang3);
+                        addDiv.appendChild(newLabel3);
+                    }
+                })
+            }
+        }
+    })
+</script>
+</html>
