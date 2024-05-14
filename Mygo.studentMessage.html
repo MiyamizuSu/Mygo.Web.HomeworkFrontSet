@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>@import "Mygo.studentMessage.css";</style>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container" id="app">
+    <table>
+        <tr>
+            <th>学生姓名</th>
+            <th>学生学号</th>
+            <th>学生班级</th>
+        </tr>
+        <tr v-for="student in studentList">
+            <td>{{ student.studentName }}</td>
+            <td>{{ student.studentClass }}</td>
+            <td>{{ student.studentNumber }}</td>
+        </tr>
+    </table>
+    <button @click.prevent="showMessage">
+        展示学生信息
+    </button>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            studentMessage:{
+                studentName:'学生姓名',
+                studentClass:'学生班级',
+                studentNumber:'学生学号',
+            },
+            studentList:[{
+
+            }]
+        },
+        methods:{
+            showMessage:function(){
+                axios.post("http://localhost:8080/user/studentMessage").then(res=>{
+                    if (res.status === 200){
+                        alert("请求成功");
+                        console.log(res.data)
+                        this.studentList=res.data.studentMessage;
+                        console.log(this.studentList);
+                    }
+                    else{
+                        alert("请求失败"+res.status)
+                    }
+                })
+            }
+        }
+    })
+</script>
+<script src="layui/layui.js"></script>
+<script>
+</script>
+</html>
